@@ -8,7 +8,7 @@ from flask_swagger import swagger
 from flask_cors import CORS
 from utils import APIException, generate_sitemap
 from admin import setup_admin
-from models import db, User
+from models import db, User, Planet, Character, Starship
 #from models import Person
 
 app = Flask(__name__)
@@ -31,13 +31,70 @@ def sitemap():
     return generate_sitemap(app)
 
 @app.route('/user', methods=['GET'])
-def handle_hello():
+def handle_hello(): 
 
-    response_body = {
-        "msg": "Hello, this is your GET /user response "
+    response = {
+        "msg": "Jose Hurtado"
     }
 
-    return jsonify(response_body), 200
+    return jsonify(response)
+
+#Planet Get and Post Methiod Request
+@app.route('/planet', methods=['GET'])
+def planet_get():
+    planet = Planet.query.all()
+    response = []
+    for i in planet:
+        response.append(i.serialize())
+    
+    return jsonify(response)
+
+@app.route('/planet', methods=['POST'])
+def planet_post():
+    payload_planet = request.get_json() #payload_planet is just the name - We could change it
+    info_planet = Planet(name=payload_planet['name'], diameter=payload_planet['diameter'], image=payload_planet['image'], gravity=payload_planet['gravity']) #Planet DB info from class
+    db.session.add(info_planet)
+    db.session.commit()
+    
+    return 'Planet Succesfully Added'
+
+#Character Get and Post Methiod Request
+@app.route('/character', methods=['GET'])
+def character_get():
+    character = Character.query.all()
+    response = []
+    for i in character:
+        response.append(i.serialize())
+    
+    return jsonify(response)
+
+@app.route('/character', methods=['POST'])
+def character_post():
+    payload_character = request.get_json() #payload_character is just the name - We could change it
+    info_character = Character(name=payload_character['name'], gender=payload_character['gender'], image=payload_character['image'], homeworld=payload_character['homeworld']) #Character DB info from class
+    db.session.add(info_character)
+    db.session.commit()
+    
+    return 'Character Succesfully Added'
+
+#Starship Get and Post Methiod Request
+@app.route('/starship', methods=['GET'])
+def starship_get():
+    starship = Starship.query.all()
+    response = []
+    for i in starship:
+        response.append(i.serialize())
+    
+    return jsonify(response)
+
+@app.route('/starship', methods=['POST'])
+def starship_post():
+    payload_starship = request.get_json() #payload_starship is just the name - We could change it
+    info_starship = Starship(name=payload_starship['name'], model=payload_starship['model'], image=payload_starship['image'], length=payload_starship['length']) #Starship DB info from class
+    db.session.add(info_starship)
+    db.session.commit()
+    
+    return 'Starship Succesfully Added'
 
 # this only runs if `$ python src/main.py` is executed
 if __name__ == '__main__':

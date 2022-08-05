@@ -9,7 +9,7 @@ class User(db.Model):
     is_active = db.Column(db.Boolean(), unique=False, nullable=False)
 
     def __repr__(self):
-        return '<User %r>' % self.username
+        return '<User %r>' % self.email
 
     def serialize(self):
         return {
@@ -71,26 +71,26 @@ class Starship(db.Model):
                 "image": self.image,
                 "length": self.length
         }
-# class Favorite(db.Model):
-#         __tablename__ = 'favorite'
-#         id = db.Column(db.Integer, primary_key=True)
-#         user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
-#         user = db.relationship('User')
-#         starship_id = db.Column(db.Integer, db.ForeignKey('starship.id'))
-#         starship = db.relationship('Starship')
-#         character_id = db.Column(db.Integer, db.ForeignKey('character.id'))
-#         character = db.relationship('Character')
-#         planet_id = db.Column(db.Integer, db.ForeignKey('planet.id'))
-#         planet = db.relationship('Planet')
+class Favorite(db.Model):
+        __tablename__ = 'favorite'
+        id = db.Column(db.Integer, primary_key=True)
+        user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
+        user = db.relationship('User')
+        starship_id = db.Column(db.Integer, db.ForeignKey('starship.id'))
+        starship = db.relationship('Starship')
+        character_id = db.Column(db.Integer, db.ForeignKey('character.id'))
+        character = db.relationship('Character')
+        planet_id = db.Column(db.Integer, db.ForeignKey('planet.id'))
+        planet = db.relationship('Planet')
 
-#         def __repr__(self):
-#             return '<Favorite %r>' % self.id
+        def __repr__(self):
+            return '<Favorite %r>' % self.id
 
-#         def serialize(self):
-#             return {
-#                 "id": self.id,
-#                 # "user": self.user,
-#                 # "starship_id": self.starship_id,
-#                 # "character_id": self.character_id,
-#                 # "planet_id": self.planet_id
-#         }
+        def serialize(self):
+            return {
+                "id": self.id,
+                "user": self.user,
+                "starship_id": self.starship_id,
+                "character_id": self.character_id,
+                "planet_id": self.planet_id
+        }
