@@ -43,9 +43,10 @@ def handle_hello():
 @app.route('/planet', methods=['GET'])
 def planet_get():
     planet = Planet.query.all()
-    response = []
+    planet_list = []
+    response = {"results":planet_list}
     for i in planet:
-        response.append(i.serialize())
+        planet_list.append(i.serialize())
     
     return jsonify(response)
 
@@ -56,7 +57,7 @@ def planet_post():
     db.session.add(info_planet)
     db.session.commit()
     
-    return 'Planet Succesfully Added'
+    return jsonify(reponse)
 
 #Character Get and Post Methiod Request
 @app.route('/character', methods=['GET'])
